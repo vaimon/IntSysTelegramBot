@@ -9,15 +9,15 @@
         <srai>меня зовут <star/></srai>
     </template>
   </category>
-  
+
   <category>
     <pattern>меня зовут *</pattern>
     <template>
       <random>
-        <li>Здравствуйте, <set name="user-name"><star /></set>!
-        </li>
-        <li>Добро пожаловать, <set name="user-name"><star /></set>!
-        </li>
+        <li>Здравствуйте, <set name="user-name"><star /></set>!</li>
+        <li>Добро пожаловать, <set name="user-name"><star /></set>!</li>
+        <li>Привет, <set name="user-name"><star /></set>! А я <get name = "name"/>.</li>
+        <li>Добро пожаловать, <set name="user-name"><star /></set>! Я - <get name = "name"/>. Давайте болтать!</li>
       </random>
     </template>
   </category>
@@ -26,41 +26,50 @@
     <pattern>кто ты</pattern>
     <template>
       <random>
-        <li>Я заготовка бота, <get name="user-name" /></li>
+        <li>Я - бот, <srai>что ты умеешь</srai></li>
+        <li>Я - <get name = "name"/>, <srai>что ты умеешь</srai></li>
+        <li>Я - <get name = "name"/>, а ты?</li>
       </random>
     </template>
   </category>
-  
+
   <category>
-    <pattern>РАССКАЖИ О СЕБЕ</pattern>
+    <pattern>расскажи о себе</pattern>
     <template>
       <srai>кто ты</srai>
     </template>
   </category>
 
   <category>
-    <pattern>Кря *</pattern>
+    <pattern>что ты умеешь</pattern>
     <template>
-      <srai>Кря</srai>
+      умею болтать на простые темы, а ещё могу распознать (правда не очень точно) азбуку Морзе или подсказать в какой бар сходить.
     </template>
   </category>
-  
+
   <category>
-    <pattern>_ Кря *</pattern>
+    <pattern>кря *</pattern>
     <template>
       <srai>Кря</srai>
     </template>
   </category>
 
   <category>
-    <pattern>_ Кря</pattern>
+    <pattern>_ кря *</pattern>
     <template>
-      <srai>Кря</srai>
+      <srai>кря</srai>
     </template>
   </category>
 
   <category>
-    <pattern>Кря</pattern>
+    <pattern>_ кря</pattern>
+    <template>
+      <srai>кря</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>кря</pattern>
     <template>
       <random>
         <li>Кря</li>
@@ -86,23 +95,35 @@
   </category>
 
   <category>
-    <pattern>Что ты умеешь</pattern>
-    <template>
-      Волшебное ничего
-    </template>
-  </category>
-  
-  <category>
     <pattern>Аудио</pattern>
-    <template>Жаль, я не умею слушать</template>
+    <template>Красивый голос! Может, на первый канал к Нагиеву?</template>
   </category>
+
   <category>
     <pattern>Видео</pattern>
-    <template>Спасибо, но, кажется, у меня сломалась кнопка запуска</template>
+    <template>Спасибо, посмотрел, очень красиво, но зачем?</template>
   </category>
-  
+
   <category>
     <pattern>*</pattern>
-    <template>Я такое не знаю, <get name="user-name"/></template>
+    <template>
+      <random>
+      <li>Я такое не знаю, <get name="user-name"/></li>
+      <li>Ля ля ля ля ля ля</li>
+      <li>Очень интересно но ничего не понятно</li>
+      <li>Класс. Супер. А понятнее можно?</li>
+      <li>Я ещё глупенький, давайте что-нибудь попроще</li>
+      <li>О чём мы?</li>
+      <li>Не понял</li>
+      <li>Эээээээээээээээ</li>
+      <li>Ну, это круто конечно, но я не знаю что ответить</li>
+      <li>А давайте без таких непонятностей пожалуйста :(</li>
+      <li>Нууууу...</li>
+      <li>Я робот ляляля</li>
+      <li>Давайте что-нибудь попроще обсудим?</li>
+      <li>СЛОЖНО СЛОЖНО НИЧЕГО НЕ ПОНЯТНО</li>
+      <li>Я не буду отвечать на это. Бебебе</li>
+      </random>
+    </template>
   </category>
 </aiml>

@@ -32,6 +32,11 @@ namespace AIMLTGBot
             {
                 user = users[userId];
             }
+
+            if (phrase.StartsWith("/"))
+            {
+                return result;
+            }
             result += bot.Chat(new Request(phrase, user, bot)).Output;
             return result;
         }
