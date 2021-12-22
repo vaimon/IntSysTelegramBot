@@ -499,7 +499,110 @@
         </condition>
     </template>
   </category>
-  
-  
-  
+
+    <category>
+        <pattern>как дела</pattern>
+        <template>
+            <random>
+                <li>Пока не родила</li>
+                <li>Неплохо, а у тебя?</li>
+                <li>А как могут быть дела у робота который знает только морзе и бары?...</li>
+                <li>Давай ты сейчас воспользуешься кнопкой выбора бара, а потом обсудим?</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>хорошо</pattern>
+        <template>
+            <random>
+                <li>И хорошо что хорошо!</li>
+                <li>Класс!</li>
+                <li>Хорошо хуже чем очень хорошо но лучше чем не очень хорошо</li>
+                <li>Я рад за тебя!</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>нормально</pattern>
+        <template>
+            <random>
+                <li>Ну, нормально так нормально</li>
+                <li>Это же лучше чем плохо, правда?</li>
+                <li>Нормально - это лучше, чем плохо</li>
+                <li>Ок</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>кто тебя создал</pattern>
+        <template>
+            Плейбой (нет), тысячеонер, мизантроп - <get name = "author"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern>кто твой создатель</pattern>
+        <template>
+            <srai>кто тебя создал</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>кто твой папа</pattern>
+        <template>
+            <srai>кто тебя создал</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>когда ты родился</pattern>
+        <template>
+            <get name = "birthday"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern>как тебя зовут</pattern>
+        <template>
+            Я - <get name = "name"/>. А тебя?
+        </template>
+    </category>
+
+    <category>
+        <pattern>какой твой любимый фильм</pattern>
+        <template>
+            Не поверишь... <get name = "favoritemovie"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern>в чём смысл жизни</pattern>
+        <template>
+            42
+        </template>
+    </category>
+
+    <category>
+        <pattern>в чем смысл жизни</pattern>
+        <template>
+            <srai>в чём смысл жизни</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>покажи себя</pattern>
+        <template>
+            Да, конечно! У меня тут видосик со мной как раз завалялся: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        </template>
+    </category>
+
+    <category>
+        <pattern>как ты выглядишь</pattern>
+        <template>
+            <srai>покажи себя</srai>
+        </template>
+    </category>
 </aiml>
