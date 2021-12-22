@@ -17,7 +17,7 @@ namespace AIMLTGBot
             }
             using (var tg = new TelegramService(token, new AIMLService()))
             {
-                Console.WriteLine($"Подключились к телеграмму как бот { tg.Username }. Ожидаем сообщений. Для завершения работы нажимте Enter");
+                Console.WriteLine($"Подключились к телеграму как бот { tg.Username }. Ожидаем сообщений. Для завершения работы нажимте Enter");
                 Console.ReadLine();
             }
         }

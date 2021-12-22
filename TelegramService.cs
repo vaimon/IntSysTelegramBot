@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -42,7 +43,22 @@ namespace AIMLTGBot
                 var messageText = update.Message.Text;
 
                 Console.WriteLine($"Received a '{messageText}' message in chat {chatId} with {username}.");
-
+                if (messageText == "/bars")
+                {
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Ха-ха, ты попал на заглушку баров!",
+                        cancellationToken: cancellationToken);
+                    return;
+                }
+                if (messageText == "/morse")
+                {
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Ха-ха, ты попал на заглушку морзе!",
+                        cancellationToken: cancellationToken);
+                    return;
+                }
                 // Echo received message text
                 await botClient.SendTextMessageAsync(
                     chatId: chatId,
