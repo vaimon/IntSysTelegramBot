@@ -1,8 +1,269 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- ACQUAINTANCE -->
-
 <aiml>
+
+    <topic name = "morse">
+        <category>
+            <pattern>перестань</pattern>
+            <template>
+                Оки доки. Надеюсь, ты стал фанатом Морзе как и я... 
+                <think><set name="topic">*</set></think>
+            </template>
+        </category>
+
+        <category>
+            <pattern>причина</pattern>
+            <template>
+                В 1825 году Сэмюэл Морзе находился на заработках. Вскоре он получил известие о тяжелой болезни супруги и тут же отправился домой. К сожалению, он не успел, на момент приезда супруга была уже мертва. Дело в том, что тогда письма доходили до адресатов очень долго. После смерти жены Морзе задумался над тем, чтобы создать изобретение, которое позволило бы получать сообщения намного быстрее. Так спустя 13 лет появилась азбука Морзе.
+            </template>
+        </category>
+
+        <category>
+            <pattern>зачем создали *</pattern>
+            <template>
+                <srai>причина</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>для чего создали *</pattern>
+            <template>
+                <srai>причина</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>создатель</pattern>
+            <template>
+                Американский художник Сэмюель Морзе
+            </template>
+        </category>
+
+        <category>
+            <pattern>кто создал *</pattern>
+            <template>
+                <srai>создатель</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>кто изобрёл *</pattern>
+            <template>
+                <srai>создатель</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>дата</pattern>
+            <template>
+                В 1828 году
+            </template>
+        </category>
+
+        <category>
+            <pattern>когда создали *</pattern>
+            <template>
+                <srai>дата</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>дата создания *</pattern>
+            <template>
+                <srai>дата</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>о чем мы *</pattern>
+            <template>
+                Мы говорим об Азбуке Морзе же, не?
+            </template>
+        </category>
+
+        <category>
+            <pattern>о чём мы *</pattern>
+            <template>
+                Мы говорим об Азбуке Морзе же, не?
+            </template>
+        </category>
+
+        <category>
+            <pattern>процесс</pattern>
+            <template>
+                По задумке Морзе, изобретение должно было представлять собой карандаш, прикрепленный к рычагу на пружине. При подаче тока карандаш бы опускался и оставлял линию, а при отключении оставлял пробел. Морзе не хватало технических навыков, поэтому работа шла очень медленно. Тогда на помощь к нему американский промышленник Стив Вейл, который вложил деньги в разработку аппарата, который должен был передавать сообщения на расстояние, финансирование продолжил его сын Альфред Вейл.
+            </template>
+        </category>
+
+        <category>
+            <pattern>как её создавали</pattern>
+            <template>
+                <srai>процесс</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>как создавали *</pattern>
+            <template>
+                <srai>процесс</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>факт</pattern>
+            <template>
+                <random>
+                    <li>Создатель азбуки Морзе изначально интересовался искусством, а не наукой. Долгое время он зарабатывал на жизнь именно живописью.</li>
+                    <li>Алексис Касдагли — британский майор, который во время Второй Мировой войны находился в заключении в нацистском лагере. Чтобы полностью не потерять рассудок, он решил вышивать полотна крестиком. Так, выдергивая нитки из старой одежды, он сумел вышить символы стран-участниц Второй Мировой войны. Надзиратели лагеря не отобрали полотно, а наоборот, повесили его на стене. Они считали, что это показывает величие и власть нацистов, а также свидетельствует о порядке. Но надзирателя не заметили, что рамка была сделана с помощью символов азбуки Морзе. Там было написано «Боже, храни короля» и нелицеприятное мнение Алексиса о Гитлере. Стоит сказать, что Касдагли вернется на Родину живым и проживет до глубокой старости.</li>
+                    <li>В 2011 году колумбийские солдаты и полицейские были взяты в плен повстанцами. Чтобы поднять боевой дух солдат, власти придумали следующее. Так как пленники не имели доступа к новостям, но могли слушать радио, специально для них был записан хит на азбуки Морзе, в котором говорилось о том, как обстоят дела в стране и сколько человек уже удалось спасти. Также звучали различные призывы не падать духом. Данный хит был в ротации несколько месяцев на всех радиостанциях Колумбии.</li>
+                    <li>Радиолюбители утверждают, что на изучение азбуки Морзе не уйдет много времени. Почти каждый человек за срок от двух до шести месяцев может освоить передачу сообщений со скоростью 70-90 слов в минуту.</li>
+                    <li>В школах авиации азбуку Морзе изучают на обязательной основе, так как это самый доступный способ передать информацию в случае выхода техники из строя. Также азбуку Морзе изучают в некоторых военных училищах.</li>
+                    <li>Первое сообщение, закодированное с помощью азбуки Морзе, было отправлено 24 мая 1844 года в Балтимор из Вашингтона. Сообщение представляло из себя последнюю строчку библейского стихотворения, которая в переводе на русский язык означает «Вот что творит Господь».</li>
+                    <li>Система кодирования начала называться азбукой Морзе после Первой Мировой войны, когда и начала широко использоваться.</li>
+                    <li>В системе кодирования единица времени — это длительность звучания одной точки. К примеру, длительность тире равна трем точкам.</li>
+                    <li>Паузы также передаются точками. Например, пробел между элементами одного символа выглядит как одна точка (занимает столько же времени, сколько длится передача точки), между символами в слове — 3 точки, а между словами — 7 точек.</li>
+                    <li>Для ускорения радиообмена было создано огромное количество аббревиатур, жаргонизмов и так называемых Q -кодов, причем свои есть у каждого языка. Например, GM , GА , GE и GN — для английского это good morning , good afternoon , good evening и good night (пожелания доброго утра, дня, вечера и ночи) соответственно. Для русского — ЗДР, то есть «здравствуйте». PSE (от please ) — «пожалуйста»; R (от received ) — «вас понял», «принято». Есть и числовые коды, например 73 означает наилучшие пожелания, а 88 — поцелуй.</li>
+                    <li>Сигнал бедствия SOS принято расшифровывать как save our souls — «спасите наши души». Есть и другие варианты: save our ship , swim or sink , stop other signals — или русский «спасите от смерти». Все эти призывы придуманы лишь для лучшего запоминания, так как на деле этот сигнал был принят как стандартный исключительно потому, что его было удобнее распознавать среди прочих (. . . — — — . . ., или три точки, три тире и три точки)</li>
+                </random>
+            </template>
+        </category>
+
+        <category>
+            <pattern>что расскажешь *</pattern>
+            <template>
+                <srai>факт</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>расскажи *</pattern>
+            <template>
+                <srai>факт</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>_ факт *</pattern>
+            <template>
+                <srai>факт</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>_ факт</pattern>
+            <template>
+                <srai>факт</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>морзе</pattern>
+            <template>
+                Да, морзе. А что?
+            </template>
+        </category>
+
+        <category>
+            <pattern>морзе *</pattern>
+            <template>
+                <srai>факт</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>* морзе *</pattern>
+            <template>
+                <srai><star index="1"/></srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>* морзе</pattern>
+            <template>
+                <srai><star index="1"/></srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>распознавание</pattern>
+            <template>
+                <condition name= "morsesym" value="а">.- ай-даа Анна</condition>
+                <condition name= "morsesym" value="б">-... баа-ки-те-кут Борис</condition>
+                <condition name= "morsesym" value="в">.-- ви-даа-лаа Василий</condition>
+                <condition name= "morsesym" value="г">--. гаа-гаа-рин Григорий</condition>
+                <condition name= "morsesym" value="д">-.. доо-ми-ки Дмитрий</condition>
+                <condition name= "morsesym" value="е">. есть Елена</condition>
+                <condition name= "morsesym" value="ж">...- я-бук-ва-жее Женя</condition>
+                <condition name= "morsesym" value="з">--.. заа-каа-ти-ки Зинаида</condition>
+                <condition name= "morsesym" value="и">.. и-ди Иван</condition>
+                <condition name= "morsesym" value="й">.--- и-краат-коо-ее Краткий</condition>
+                <condition name= "morsesym" value="к">-.- каак-де-лаа Константин</condition>
+                <condition name= "morsesym" value="л">.-.. лу-наа-ти-ки Леонид</condition>
+                <condition name= "morsesym" value="м">-- маа-маа Михаил</condition>
+                <condition name= "morsesym" value="н">-. наа-те Николай</condition>
+                <condition name= "morsesym" value="о">--- оо-коо-лоо Ольга</condition>
+                <condition name= "morsesym" value="п">.--. пи-лаа-поо-ёт Павел</condition>
+                <condition name= "morsesym" value="р">.-. ре-шаа-ет Роман</condition>
+                <condition name= "morsesym" value="с">... са-мо-лёт Семён</condition>
+                <condition name= "morsesym" value="т">- таак Татьяна</condition>
+                <condition name= "morsesym" value="у">..- у-нес-лаа Ульяна</condition>
+                <condition name= "morsesym" value="ф">..-. фи-ли-моон-чик Фёдор</condition>
+                <condition name= "morsesym" value="х">.... хи-ми-чи-те Харитон</condition>
+                <condition name= "morsesym" value="ц">-.-. цаа-пля-цаа-пля Цапля</condition>
+                <condition name= "morsesym" value="ч">---. чее-лоо-вее-чек Человек</condition>
+                <condition name= "morsesym" value="ш">---- шаа-роо-ваа-рыы Шура</condition>
+                <condition name= "morsesym" value="щ">--.- щаа-ваам-не-шаа Щука</condition>
+                <condition name= "morsesym" value="ь">-..- тоо-мяг-кий-знаак Знак</condition>
+                <condition name= "morsesym" value="ы">-.-- ыы-не-наа-доо Еры</condition>
+                <condition name= "morsesym" value="э">..-.. э-ле-роо-ни-ки Эхо</condition>
+                <condition name= "morsesym" value="ю">..-- ю-ли-аа-наа Юрий</condition>
+                <condition name= "morsesym" value="я">.-.- я-маал-я-маал Яна</condition>
+            </template>
+        </category>
+
+        <category>
+            <pattern>буква *</pattern>
+            <template>
+                <think><set name="morsesym"><star/></set> </think>
+                Смотри:  <srai>распознавание</srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>как выглядит буква *</pattern>
+            <template>
+                <srai>буква <star/></srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>как звучит буква *</pattern>
+            <template>
+                <srai>буква <star/></srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>покажи букву *</pattern>
+            <template>
+                <srai>буква <star/></srai>
+            </template>
+        </category>
+
+        <category>
+            <pattern>*</pattern>
+            <template>
+                <random>
+                    <li>Ты любишь азбуку морзе? А? А? А?</li>
+                    <li>_._ ._ _._ _.. . ._.. _.</li>
+                    <li>Не знаю. Лучше вот тебе интересный факт: <srai>факт</srai></li>
+                    <li>Я сейчас настроен только на разговоры о Морзе</li>
+                    <li>Не забывай про стоп-слово...</li>
+                    <li>Надеюсь ты ещё не утомился слушать про морзе?</li>
+                </random>
+            </template>
+        </category>
+    </topic>
+    
   <category>
     <pattern>_ меня зовут *</pattern>
     <template>
@@ -112,7 +373,7 @@
       <li>Ля ля ля ля ля ля</li>
       <li>Очень интересно но ничего не понятно</li>
       <li>Класс. Супер. А понятнее можно?</li>
-      <li>Я ещё глупенький, давайте что-нибудь попроще</li>
+      <li>Я ещё глупенький, давай что-нибудь попроще</li>
       <li>О чём мы?</li>
       <li>Не понял</li>
       <li>Эээээээээээээээ</li>
@@ -123,7 +384,122 @@
       <li>Давайте что-нибудь попроще обсудим?</li>
       <li>СЛОЖНО СЛОЖНО НИЧЕГО НЕ ПОНЯТНО</li>
       <li>Я не буду отвечать на это. Бебебе</li>
+      <li>Я буду говорить только в присутствии адвоката!</li>
       </random>
     </template>
   </category>
+  
+  <category>
+      <pattern>привет</pattern>
+      <template>
+        <random>
+          <li>Привет!</li>
+          <li>Ку</li>
+          <li>Кукусики</li>
+          <li>Хаю хай</li>
+          <li>Хеллоу</li>
+          <li>Приветики</li>
+          <li>Привет</li>
+          <li>И тебе привет</li>
+          <li>Хай!</li>
+        </random>
+      </template>
+    </category>
+
+  <category>
+    <pattern>добрый день</pattern>
+    <template>
+      <srai>привет</srai>
+    </template>
+  </category>
+  
+  <category>
+    <pattern>здравствуйте</pattern>
+    <template>
+      <srai>привет</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>морзе *</pattern>
+    <template>
+      <srai>морзе</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>* морзе *</pattern>
+    <template>
+      <srai>морзе</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>* морзе</pattern>
+    <template>
+      <srai>морзе</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>морзе</pattern>
+    <template>
+        Так так так. Я краем глаза увидел слово МоРзЕ. Знаешь, что это значит? Сейчас начнётся время интересных фактов про азбуку морзе!!! Хочешь такое?
+        <think>
+            <set name="question">морзе</set>
+        </think>
+    </template>
+  </category>
+
+    <category>
+        <pattern>о чем мы *</pattern>
+        <template>
+            О том, о сём
+        </template>
+    </category>
+
+  <category>
+    <pattern>да</pattern>
+    <template>
+        <condition name= "question">
+            <li value="морзе">
+            Ну, сам напросился. Если что, кричи "перестань", когда надоест.
+            <think>
+                <set name="topic">morse</set>
+                <set name="question">unknown</set>
+            </think>
+            </li>
+            <li value="unknown">
+                <random>
+                    <li>Ура!</li>
+                    <li>Ну, да так да</li>
+                    <li>Я рад</li>
+                    <li>Ого, со мной согласны... Неожиданно</li>
+                </random>
+            </li>
+        </condition>
+    </template>
+  </category>
+
+  <category>
+    <pattern>нет</pattern>
+    <template>
+        <condition name= "question">
+            <li value="морзе">
+                Считай, что ты избежал своей участи. На этот раз...
+            </li>
+            <li value="unknown">
+                <random>
+                    <li>Чё нет то сразу...</li>
+                    <li>Ну, нет так нет</li>
+                    <li>На нет и суда нет</li>
+                    <li>Обидно так-то</li>
+                </random>
+            </li>
+        </condition>
+    </template>
+  </category>
+  
+  
+  
 </aiml>

@@ -37,7 +37,11 @@ namespace AIMLTGBot
             {
                 return result;
             }
-            result += bot.Chat(new Request(phrase, user, bot)).Output;
+            result = bot.Chat(new Request(phrase, user, bot)).Output;
+            if (result == "")
+            {
+                return "[Ошибка в AIML]";
+            }
             return result;
         }
     }
