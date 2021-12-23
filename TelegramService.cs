@@ -54,7 +54,7 @@ namespace AIMLTGBot
             var username = message.Chat.FirstName;
             if (message.Type == MessageType.Text)
             {
-                var messageText = update.Message.Text;
+                var messageText = update.Message.Text.Replace("ё","е");
 
                 Console.WriteLine($"Received a '{messageText}' message in chat {chatId} with {username}.");
                 if (messageText == "/bars")
@@ -71,7 +71,7 @@ namespace AIMLTGBot
                     currentMode = ChatMode.RECOGNIZING;
                     await botClient.SendTextMessageAsync(
                         chatId: chatId,
-                        text: "Скинь фоточку одной из этих букв: А, Г, Е, З, Н, П, Т, Ц, Ш, Ь.\nЕсли что, я распознаю с точностью ~80%, не обижайся, если я ошибусь :(",
+                        text: "Скинь фоточку одной из этих букв (азбукой Морзе, само собой): А, Г, Е, З, Н, П, Т, Ц, Ш, Ь.\nЕсли что, я распознаю с точностью ~90%, не обижайся, если я ошибусь :(",
                         cancellationToken: cancellationToken);
                     return;
                 }
@@ -87,10 +87,20 @@ namespace AIMLTGBot
 
                 if (currentMode == ChatMode.RECOGNIZING)
                 {
+                    if (messageText.ToLower() == "хватит")
+                    {
+                        lastRecognizedLetter = "none";
+                        await botClient.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "Окей, тогда давай болтать!",
+                            cancellationToken: cancellationToken);
+                        currentMode = ChatMode.CHATTING;
+                        return;
+                    }
                     if (lastRecognizedLetter!="none")
                     {
                         string answer;
-                        if (messageText == lastRecognizedLetter)
+                        if (messageText.ToUpper() == lastRecognizedLetter)
                         {
                             answer = aimlService.Talk(chatId, username, "угадал");
                         }
@@ -104,9 +114,9 @@ namespace AIMLTGBot
                             cancellationToken: cancellationToken);
                         await botClient.SendTextMessageAsync(
                             chatId: chatId,
-                            text: "Ну что, давай болтать дальше.",
+                            text: "Если хочешь болтать дальше, напиши \"хватит\", ну или продолжим играть в угадайку",
                             cancellationToken: cancellationToken);
-                        currentMode = ChatMode.CHATTING;
+                        
                         lastRecognizedLetter = "none";
                     }
                     else
@@ -122,6 +132,14 @@ namespace AIMLTGBot
             // Загрузка изображений пригодится для соединения с нейросетью
             if (message.Type == MessageType.Photo)
             {
+                if (currentMode != ChatMode.RECOGNIZING)
+                {
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Фотка красивая, но мы же сейчас не в распознавание букв играем, не?",
+                        cancellationToken: cancellationToken);
+                    return;
+                }
                 var photoId = message.Photo.Last().FileId;
                 Telegram.Bot.Types.File fl = await client.GetFileAsync(photoId, cancellationToken: cancellationToken);
                 var imageStream = new MemoryStream();
