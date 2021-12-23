@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Speech.AudioFormat;
 using System.Speech.Synthesis;
 using System.Text;
 using CLIPSNET;
@@ -20,6 +21,9 @@ namespace AIMLTGBot
         Dictionary<int, Rule> rules;
         private string clipsCode = "";
         private List<KeyValuePair<string, double>> finalChoice;
+        private string currentQuestion = "";
+        private List<int> currentFactOptions;
+        private int processedRules = 0;
 
         public CLIPSService()
         {
@@ -29,6 +33,8 @@ namespace AIMLTGBot
             roboWoman.Rate = 4;
             facts = new Dictionary<int, Fact>();
             rules = new Dictionary<int, Rule>();
+            finalChoice = new List<KeyValuePair<string, double>>();
+            currentFactOptions = new List<int>();
             loadDB();
             clipsCode = generateCLIPScode();
             clips.Clear();
@@ -168,7 +174,7 @@ namespace AIMLTGBot
             return sb.ToString();
         }
 
-        private bool HandleResponse()
+        private string HandleResponse()
         {
             //  Вытаскиаваем факт из ЭС
             String evalStr = "(find-fact ((?f ioproxy)) TRUE)";
@@ -178,12 +184,7 @@ namespace AIMLTGBot
             MultifieldValue vamf = (MultifieldValue) fv["answers"];
             if (damf.Count == 0)
             {
-                foreach (var bar in finalChoice.OrderByDescending(x => x.Value))
-                {
-                    roboWoman.SpeakAsync($"С уверенностью {Math.Round(bar.Value * 100, 2)}% вам подойдёт {bar.Key}");
-                }
-
-                return false;
+                return "end";
             }
 
             //outputBox.Text += "Новая итерация : " + System.Environment.NewLine;
@@ -194,8 +195,6 @@ namespace AIMLTGBot
                 string message = Encoding.UTF8.GetString(bytes);
                 if (message.StartsWith("#ask"))
                 {
-                    var builder = new PromptBuilder();
-
                     var phrases = new List<string>();
                     if (vamf.Count > 0)
                     {
@@ -208,9 +207,13 @@ namespace AIMLTGBot
                             phrases.Add(messagee);
                         }
                     }
-                    askSomeQuestion(message, phrases);
+
+                    processedRules++;
+                    clips.Eval("(assert (clearmessage))");
+                    return askSomeQuestion(message, phrases);
                 }
-                else if (message.StartsWith("#"))
+
+                if (message.StartsWith("#"))
                 {
                     var parts = message.Split('|');
                     finalChoice.Add(new KeyValuePair<string, double>(parts[1],
@@ -219,35 +222,194 @@ namespace AIMLTGBot
             }
             
             clips.Eval("(assert (clearmessage))");
-            return true;
+            processedRules++;
+            return "next";
+        }
+
+        public string startOutput()
+        {
+            processedRules = 0;
+            clips.Reset();
+            clips.Run();
+            string answer;
+            while ((answer = HandleResponse()) == "next")
+            {
+                clips.Run();
+            }
+            return answer;
         }
         
-        void askSomeQuestion(string message, List<string> answers)
+        string askSomeQuestion(string message, List<string> answers)
         {
-            List<KeyValuePair<int, Fact>> selectedFacts = new List<KeyValuePair<int, Fact>>();
+            currentQuestion = message;
+            currentFactOptions.Clear();
+            StringBuilder sb = new StringBuilder();
             if (message.EndsWith("features"))
             {
+                sb.AppendLine("Для начала давай определимся с фичами бара твоей мечты! Выбери не больше 3:");
+                for (var index = 0; index < answers.Count; index++)
+                {
+                    var answer = answers[index];
+                    var splitted = answer.Split('-');
+                    currentFactOptions.Add(int.Parse(splitted[0]));
+                    sb.AppendLine($"{index + 1}) {splitted[1]}");
+                }
+                sb.AppendLine("В ответ пришли номера наиболее подходящих вариантов через пробел. Ну, или если тебе всё равно, пришли 0.");
             }
             else if (message.EndsWith("location"))
             {
+                sb.AppendLine("А какой район тебе лучше подходит? Оцени каждый от 0 до 100:");
+                for (var index = 0; index < answers.Count; index++)
+                {
+                    var answer = answers[index];
+                    var splitted = answer.Split('-');
+                    currentFactOptions.Add(int.Parse(splitted[0]));
+                    sb.AppendLine($"{index + 1}) {splitted[1]}");
+                }
+                sb.AppendLine("В ответ пришли через пробел 3 оценки - соответственно каждому району по порядку.");
             }
             else if (message.EndsWith("company"))
             {
+                sb.AppendLine("А ты тусовщик или одиночка? Выбери подходящие варианты:");
+                for (var index = 0; index < answers.Count; index++)
+                {
+                    var answer = answers[index];
+                    var splitted = answer.Split('-');
+                    currentFactOptions.Add(int.Parse(splitted[0]));
+                    sb.AppendLine($"{index + 1}) {splitted[1]}");
+                }
+                sb.AppendLine("В ответ пришли через пробел номера, соответствующие размеру компании - можно выбрать один или несколько вариантов.");
             }
             else if (message.EndsWith("budget"))
             {
+                sb.AppendLine("Проверь кошелёк перед тем как пить! Трезво оцени свои финансовые возможности от 0 до 100:");
+                for (var index = 0; index < answers.Count; index++)
+                {
+                    var answer = answers[index];
+                    var splitted = answer.Split('-');
+                    currentFactOptions.Add(int.Parse(splitted[0]));
+                    sb.AppendLine($"{index + 1}) {splitted[1]}");
+                }
+                sb.AppendLine("В ответ пришли через пробел 3 оценки - соответственно каждому варианту по порядку.");
             }
             else if (message.EndsWith("drinks"))
             {
+                sb.AppendLine("А теперь самое главное! Что пить-то будем? Выбери из списка:");
+                for (var index = 0; index < answers.Count; index++)
+                {
+                    var answer = answers[index];
+                    var splitted = answer.Split('-');
+                    currentFactOptions.Add(int.Parse(splitted[0]));
+                    sb.AppendLine($"{index + 1}) {splitted[1]}");
+                }
+                sb.AppendLine("В ответ пришли через пробел номера, соответствующие тому, что хочешь выпить - можно выбрать один или несколько вариантов.");
             }
             else
             {
                 throw new Exception("Упс... Кажется, я сломал клипс...");
             }
+
+            return sb.ToString();
+        }
+
+        public void onQuestionAnswered(string answer)
+        {
+            if (currentQuestion.EndsWith("features"))
+            {
+                if (answer == "0")
+                {
+                    return;
+                }
+                var selected = answer.Split(' ').Select(int.Parse).Select(x => currentFactOptions[x-1]).ToList();
+                foreach (var t in currentFactOptions)
+                {
+                    if (!selected.Contains(t))
+                    {
+                        selected.Add((facts[t] as InitialFact).oppositeFact);
+                    }
+                }
+
+                var selectedFacts = selected.Select(x => facts.GetEntry(x)).ToList();
+                foreach (var fact in selectedFacts)
+                {
+                    fact.Value.certainty = 1;
+                }
+                setQuestionAnswer(selectedFacts);
+                return;
+            }
+
+            if (currentQuestion.EndsWith("drinks") || currentQuestion.EndsWith("company"))
+            {
+                var selected = answer.Split(' ').Select(int.Parse).Select(x => currentFactOptions[x-1]).Select(x => facts.GetEntry(x)).ToList();
+                foreach (var fact in selected)
+                {
+                    fact.Value.certainty = 1;
+                }
+                setQuestionAnswer(selected);
+                return;
+            }
+            
+            if (currentQuestion.EndsWith("budget") || currentQuestion.EndsWith("location"))
+            {
+                var certainties = answer.Split(' ').Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray();
+                List<KeyValuePair<int, Fact>> selected = new List<KeyValuePair<int, Fact>>();
+                for (int i = 0; i < currentFactOptions.Count; i++)
+                {
+                    var fact = facts.GetEntry(currentFactOptions[i]);
+                    fact.Value.certainty = certainties[i] < 0.01? 0 : certainties[i];
+                    selected.Add(fact);
+                }
+                setQuestionAnswer(selected);
+                return;
+            }
+
+            throw new Exception("Сюрприз! Ты где-то накосячил");
+        }
+
+        public string nextIteration()
+        {
+            string answer;
+            clips.Run();
+            while ((answer = HandleResponse()) == "next")
+            {
+                clips.Run();
+            }
+            return answer;
+        }
+
+        public string getTextResults()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(
+                "Ну а если вы не хотите слушать мой ангельский голосок, то вот наиболее подходящие вам бары:");
+            foreach (var bar in finalChoice.OrderByDescending(x=>x.Value))
+            {
+                sb.AppendLine($"{bar.Key} - {Math.Round(bar.Value * 100,2)}%");
+            }
+
+            return sb.ToString();
+        }
+
+        public MemoryStream getAudioResults()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(
+                $"Ой. Кажется, я не представилась. Меня зовут Ирина, и всё это время ты общался со мной. Я перебрала целых {processedRules} правил, и вот что у меня получилось:");
+            foreach (var bar in finalChoice.OrderByDescending(x=> x.Value))
+            {
+                sb.AppendLine($"С уверенностью {Math.Round(bar.Value * 100, 2)}% тебе подойдёт {bar.Key}");
+            }
+
+            sb.AppendLine("Надеюсь, ты хорошо проведёшь вечер! Пока!");
+            MemoryStream audio = new MemoryStream();
+            roboWoman.SetOutputToWaveStream(audio);
+            roboWoman.Speak(sb.ToString());
+            return audio;
+        }
+        
+        void setQuestionAnswer(List<KeyValuePair<int, Fact>> selectedFacts){
             foreach (var pair in selectedFacts)
             {
-                var x =
-                    $"(assert (fact (num {pair.Key})(description \"{pair.Value.factDescription}\")(certainty {Math.Round(pair.Value.certainty, 2).ToString(CultureInfo.InvariantCulture)})))";
                 clips.Eval($"(assert (fact (num {pair.Key})(description \"{pair.Value.factDescription}\")(certainty {Math.Round(pair.Value.certainty, 2).ToString(CultureInfo.InvariantCulture)})))");
             }
         }

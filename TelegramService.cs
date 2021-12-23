@@ -69,7 +69,11 @@ namespace AIMLTGBot
                     dialogMode[chatId] = ChatMode.CHOOSING;
                     await botClient.SendTextMessageAsync(
                         chatId: chatId,
-                        text: "Ха-ха, ты попал на заглушку баров!",
+                        text: "Окей, тогда моя подружка Ирина поможет мне с выбором! Тебе надо будет ответить на несколько вопросов.",
+                        cancellationToken: cancellationToken);
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: clipsService.startOutput(),
                         cancellationToken: cancellationToken);
                     return;
                 }
@@ -140,7 +144,25 @@ namespace AIMLTGBot
                             cancellationToken: cancellationToken);
                     }
                 }
-                
+
+                if (dialogMode[chatId] == ChatMode.CHOOSING)
+                {
+                    clipsService.onQuestionAnswered(messageText);
+                    var nextQuestion = clipsService.nextIteration();
+                    if (nextQuestion == "end")
+                    {
+                        await botClient.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: clipsService.getTextResults(),
+                            cancellationToken: cancellationToken);
+                        dialogMode[chatId] = ChatMode.CHATTING;
+                        return;
+                    }
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: nextQuestion,
+                        cancellationToken: cancellationToken);
+                }
             }
             // Загрузка изображений пригодится для соединения с нейросетью
             if (message.Type == MessageType.Photo)
