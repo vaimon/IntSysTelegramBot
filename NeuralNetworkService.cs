@@ -56,7 +56,7 @@ namespace AIMLTGBot
                 res.Add(0);
             }
 
-            return res.ToArray();
+            return res.Select(x=>x * scaleFactor).ToArray();
         }
 
         public NeuralNetworkService()
