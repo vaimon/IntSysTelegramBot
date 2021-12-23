@@ -72,6 +72,9 @@
     <Reference Include="AIMLbot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AIMLBot.1.0.0\lib\dotnet\AIMLbot.dll</HintPath>
     </Reference>
+    <Reference Include="CLIPSCLRWrapper, Version=1.0.6893.855, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Lib\CLIPSCLRWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=2021.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>packages\JetBrains.Annotations.2021.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
@@ -110,6 +113,7 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Speech" />
     <Reference Include="System.Threading.Channels, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Threading.Channels.6.0.0\lib\net461\System.Threading.Channels.dll</HintPath>
     </Reference>
@@ -131,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIMLService.cs" />
+    <Compile Include="CLIPSService.cs" />
+    <Compile Include="Models.cs" />
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="NeuralNetworkService.cs" />
     <Compile Include="Program.cs" />
@@ -177,6 +183,12 @@
     </Content>
     <Content Include="config\Substitutions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="db\base.clp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="db\db.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="net10.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

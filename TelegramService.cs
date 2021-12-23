@@ -25,6 +25,7 @@ namespace AIMLTGBot
         private readonly TelegramBotClient client;
         private readonly AIMLService aimlService;
         private readonly NeuralNetworkService networkService;
+        private readonly CLIPSService clipsService;
         private string lastRecognizedLetter = "none";
 
         Dictionary<long,ChatMode> dialogMode;
@@ -36,6 +37,7 @@ namespace AIMLTGBot
         {
             this.aimlService = aimlService;
             networkService = new NeuralNetworkService();
+            clipsService = new CLIPSService();
             client = new TelegramBotClient(token);
             dialogMode = new Dictionary<long, ChatMode>();
             
