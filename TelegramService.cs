@@ -62,8 +62,17 @@ namespace AIMLTGBot
             if (message.Type == MessageType.Text)
             {
                 var messageText = update.Message.Text.Replace("ё","е");
-
                 Console.WriteLine($"Received a '{messageText}' message in chat {chatId} with {username}.");
+                if(messageText == "тест")
+                {
+                    Console.WriteLine("Начало генерации голосового...");
+                    await botClient.SendVoiceAsync(
+                        chatId: chatId,
+                        voice: clipsService.test(),
+                        cancellationToken: cancellationToken);
+                    Console.WriteLine("Голосовое отправлено!");
+                    return;
+                }
                 if (messageText == "/bars")
                 {
                     dialogMode[chatId] = ChatMode.CHOOSING;
@@ -156,7 +165,7 @@ namespace AIMLTGBot
                         Console.WriteLine("Format exception!");
                         await botClient.SendTextMessageAsync(
                             chatId: chatId,
-                            text: "Эй, ты чего это мне подсунул? Я же вроде сказал в каком формате присылать...",
+                            text: "Эй, ты чего это мне подсунул? Я же вроде сказала в каком формате присылать...",
                             cancellationToken: cancellationToken);
                         return;
                     }
@@ -164,6 +173,12 @@ namespace AIMLTGBot
                     var nextQuestion = clipsService.nextIteration();
                     if (nextQuestion == "end")
                     {
+                        Console.WriteLine("Начало генерации голосового...");
+                        await botClient.SendVoiceAsync(
+                            chatId: chatId,
+                            voice: clipsService.getAudioResults(),
+                            cancellationToken: cancellationToken);
+                        Console.WriteLine("Голосовое отправлено!");
                         await botClient.SendTextMessageAsync(
                             chatId: chatId,
                             text: clipsService.getTextResults(),

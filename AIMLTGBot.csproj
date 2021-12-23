@@ -190,6 +190,11 @@
     <Content Include="db\db.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ffmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ffmpeg\ffplay.exe" />
+    <Content Include="ffmpeg\ffprobe.exe" />
     <Content Include="net10.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

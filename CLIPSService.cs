@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Speech.AudioFormat;
 using System.Speech.Synthesis;
 using System.Text;
 using CLIPSNET;
+using Telegram.Bot.Types.InputFiles;
 
 namespace AIMLTGBot
 {
@@ -384,7 +387,7 @@ namespace AIMLTGBot
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
-                $"Окей. Я (вместе с Ириной! Она должна была тебе рассказать всё это, но простыла, бедняжка) проанализировали кучу всего и перебрали целых {processedRules} правил. Вот наиболее подходящие тебе бары:");
+                $"Если ты вдруг не хочешь послушать ангельский голосок Ирины, то вот, что она тебе предлагает:");
             foreach (var bar in finalChoice.OrderByDescending(x=>x.Value))
             {
                 sb.AppendLine($"{bar.Key} - {Math.Round(bar.Value * 100,2)}%");
@@ -393,22 +396,51 @@ namespace AIMLTGBot
             return sb.ToString();
         }
 
-        public MemoryStream getAudioResults()
+        public InputOnlineFile getAudioResults()
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
-                $"Ой. Кажется, я не представилась. Меня зовут Ирина, и всё это время ты общался со мной. Я перебрала целых {processedRules} правил, и вот что у меня получилось:");
+                $"Привет! У тебя отличный вкус на бары! Ой. Кажется, я не представилась. Меня зовут Ирина, и всё это время ты общался со мной. Я перебрала целых {processedRules} правил, и вот что у меня получилось подобрать:");
             foreach (var bar in finalChoice.OrderByDescending(x=> x.Value))
             {
                 sb.AppendLine($"С уверенностью {Math.Round(bar.Value * 100, 2)}% тебе подойдёт {bar.Key}");
             }
 
             sb.AppendLine("Надеюсь, ты хорошо проведёшь вечер! Пока!");
-            MemoryStream audio = new MemoryStream();
-            roboWoman.SetOutputToWaveStream(audio);
+            roboWoman.SetOutputToWaveFile("output.wav");
             roboWoman.Speak(sb.ToString());
-            return audio;
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "./ffmpeg/ffmpeg.exe";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.Arguments = "-y -i output.wav -acodec libvorbis -f ogg output.ogg";
+                process.Start();
+                process.WaitForExit(5000);
+            }
+            
+            var stream = File.Open("output.ogg", FileMode.Open);
+            return new InputOnlineFile(stream);
         }
+
+        public InputOnlineFile test()
+        {
+            roboWoman.SetOutputToWaveFile("output.wav");
+            roboWoman.Speak("Тут короче надо тест провести, поэтому вот: А я говорю ляляля");
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "./ffmpeg/ffmpeg.exe";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.Arguments = "-y -i output.wav -acodec libvorbis -f ogg output.ogg";
+                process.Start();
+                process.WaitForExit(5000);
+            }
+            
+            var stream = File.Open("output.ogg", FileMode.Open);
+            return new InputOnlineFile(stream);
+        }
+        
         
         void setQuestionAnswer(List<KeyValuePair<int, Fact>> selectedFacts){
             foreach (var pair in selectedFacts)
