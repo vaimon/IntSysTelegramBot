@@ -667,4 +667,18 @@
             </random>
         </template>
     </category>
+
+    <category>
+        <pattern>спасибо</pattern>
+        <template>
+            <random>
+                <li>Пожалуйста!</li>
+                <li>Не за что!</li>
+                <li>Да не за что!</li>
+                <li>На здоровье!</li>
+                <li>Всегда пожалуйста!</li>
+                <li>Без проблем!</li>
+            </random>
+        </template>
+    </category>
 </aiml>

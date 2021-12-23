@@ -351,13 +351,16 @@ namespace AIMLTGBot
             
             if (currentQuestion.EndsWith("budget") || currentQuestion.EndsWith("location"))
             {
-                var certainties = answer.Split(' ').Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray();
+                var certainties = answer.Split(' ').Select(x => int.Parse(x)/100.0).ToArray();
                 List<KeyValuePair<int, Fact>> selected = new List<KeyValuePair<int, Fact>>();
                 for (int i = 0; i < currentFactOptions.Count; i++)
                 {
                     var fact = facts.GetEntry(currentFactOptions[i]);
-                    fact.Value.certainty = certainties[i] < 0.01? 0 : certainties[i];
-                    selected.Add(fact);
+                    fact.Value.certainty = certainties[i];
+                    if (certainties[i] > 0.01)
+                    {
+                        selected.Add(fact);
+                    }
                 }
                 setQuestionAnswer(selected);
                 return;
@@ -381,12 +384,12 @@ namespace AIMLTGBot
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
-                "Ну а если вы не хотите слушать мой ангельский голосок, то вот наиболее подходящие вам бары:");
+                $"Окей. Я (вместе с Ириной! Она должна была тебе рассказать всё это, но простыла, бедняжка) проанализировали кучу всего и перебрали целых {processedRules} правил. Вот наиболее подходящие тебе бары:");
             foreach (var bar in finalChoice.OrderByDescending(x=>x.Value))
             {
                 sb.AppendLine($"{bar.Key} - {Math.Round(bar.Value * 100,2)}%");
             }
-
+            sb.AppendLine("Надеюсь, ты хорошо проведёшь вечер!");
             return sb.ToString();
         }
 

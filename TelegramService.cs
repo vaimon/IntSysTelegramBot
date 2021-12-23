@@ -147,7 +147,20 @@ namespace AIMLTGBot
 
                 if (dialogMode[chatId] == ChatMode.CHOOSING)
                 {
-                    clipsService.onQuestionAnswered(messageText);
+                    try
+                    {
+                        clipsService.onQuestionAnswered(messageText);
+                    }
+                    catch (FormatException e)
+                    {
+                        Console.WriteLine("Format exception!");
+                        await botClient.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "Эй, ты чего это мне подсунул? Я же вроде сказал в каком формате присылать...",
+                            cancellationToken: cancellationToken);
+                        return;
+                    }
+                    
                     var nextQuestion = clipsService.nextIteration();
                     if (nextQuestion == "end")
                     {
