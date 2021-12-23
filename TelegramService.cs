@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace AIMLTGBot
         private readonly NeuralNetworkService networkService;
         private string lastRecognizedLetter = "none";
 
-        private ChatMode currentMode;
+        Dictionary<long,ChatMode> dialogMode;
         // CancellationToken - инструмент для отмены задач, запущенных в отдельном потоке
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
         public string Username { get; }
@@ -36,7 +37,7 @@ namespace AIMLTGBot
             this.aimlService = aimlService;
             networkService = new NeuralNetworkService();
             client = new TelegramBotClient(token);
-            currentMode = ChatMode.CHATTING;
+            dialogMode = new Dictionary<long, ChatMode>();
             
             client.StartReceiving(HandleUpdateMessageAsync, HandleErrorAsync, new ReceiverOptions
             {   // Подписываемся только на сообщения
@@ -51,6 +52,10 @@ namespace AIMLTGBot
         {
             var message = update.Message;
             var chatId = message.Chat.Id;
+            if (!dialogMode.ContainsKey(chatId))
+            {
+                dialogMode.Add(chatId,ChatMode.CHATTING);
+            }
             var username = message.Chat.FirstName;
             if (message.Type == MessageType.Text)
             {
@@ -59,7 +64,7 @@ namespace AIMLTGBot
                 Console.WriteLine($"Received a '{messageText}' message in chat {chatId} with {username}.");
                 if (messageText == "/bars")
                 {
-                    currentMode = ChatMode.CHOOSING;
+                    dialogMode[chatId] = ChatMode.CHOOSING;
                     await botClient.SendTextMessageAsync(
                         chatId: chatId,
                         text: "Ха-ха, ты попал на заглушку баров!",
@@ -68,7 +73,8 @@ namespace AIMLTGBot
                 }
                 if (messageText == "/morse")
                 {
-                    currentMode = ChatMode.RECOGNIZING;
+                    lastRecognizedLetter = "none";
+                    dialogMode[chatId] = ChatMode.RECOGNIZING;
                     await botClient.SendTextMessageAsync(
                         chatId: chatId,
                         text: "Скинь фоточку одной из этих букв (азбукой Морзе, само собой): А, Г, Е, З, Н, П, Т, Ц, Ш, Ь.\nЕсли что, я распознаю с точностью ~90%, не обижайся, если я ошибусь :(",
@@ -76,7 +82,7 @@ namespace AIMLTGBot
                     return;
                 }
                 
-                if (currentMode == ChatMode.CHATTING)
+                if (dialogMode[chatId] == ChatMode.CHATTING)
                 {
                     await botClient.SendTextMessageAsync(
                         chatId: chatId,
@@ -85,7 +91,7 @@ namespace AIMLTGBot
                     return;
                 }
 
-                if (currentMode == ChatMode.RECOGNIZING)
+                if (dialogMode[chatId] == ChatMode.RECOGNIZING)
                 {
                     if (messageText.ToLower() == "хватит")
                     {
@@ -94,19 +100,24 @@ namespace AIMLTGBot
                             chatId: chatId,
                             text: "Окей, тогда давай болтать!",
                             cancellationToken: cancellationToken);
-                        currentMode = ChatMode.CHATTING;
+                        dialogMode[chatId] = ChatMode.CHATTING;
                         return;
                     }
                     if (lastRecognizedLetter!="none")
                     {
                         string answer;
-                        if (messageText.ToUpper() == lastRecognizedLetter)
+                        if (messageText.Length > 1)
+                        {
+                            answer = "Ну я вообще то букву ждал... Ну, будем считать что это было правильно";
+                        }
+                        else if (messageText.ToUpper() == lastRecognizedLetter)
                         {
                             answer = aimlService.Talk(chatId, username, "угадал");
                         }
                         else
                         {
-                            answer = aimlService.Talk(chatId, username, "промахнулся") + " Но я дообучился на этом примере и стал немного умнее!";
+                            answer = aimlService.Talk(chatId, username, "промахнулся");
+                            
                         }
                         await botClient.SendTextMessageAsync(
                             chatId: chatId,
@@ -132,7 +143,7 @@ namespace AIMLTGBot
             // Загрузка изображений пригодится для соединения с нейросетью
             if (message.Type == MessageType.Photo)
             {
-                if (currentMode != ChatMode.RECOGNIZING)
+                if (dialogMode[chatId] != ChatMode.RECOGNIZING)
                 {
                     await botClient.SendTextMessageAsync(
                         chatId: chatId,
